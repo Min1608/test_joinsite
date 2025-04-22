@@ -23,10 +23,14 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+const emailRecipients = EMAIL_TO.includes(',')
+  ? EMAIL_TO.split(',')
+  : [EMAIL_TO];
+
 async function sendAlert(error) {
   const info = await transporter.sendMail({
     from: EMAIL_FROM,
-    to: EMAIL_TO,
+    to: emailRecipients.join(','),
     subject: `⚠️ Health Check Failed: ${SERVER_URL}`,
     text: `Lỗi khi ping ${SERVER_URL}:\n\n${error.message || error}`,
   });
